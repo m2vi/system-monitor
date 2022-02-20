@@ -1,5 +1,5 @@
 module.exports = {
-  darkMode: false,
+  media: false,
   content: ['./**/*.tsx'],
   theme: {
     fontSize: {
