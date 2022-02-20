@@ -12,20 +12,29 @@ function Home(props: any) {
 
   return (
     <React.Fragment>
-      <Head children>
+      <Head>
         <title>System Monitor</title>
       </Head>
       <div className='w-full px-120 py-11 flex justify-center items-start'>
-        <div className='flex justify-between items-center w-full max-w-sm'>
+        <div className='grid grid-flow-row grid-cols-2 gap-8 justify-between w-full max-w-sm'>
           <div className='flex flex-col text-center'>
             <span className='text-primary-200'>Battery</span>
-            <span className=''>{result?.battery?.percent}%</span>
+            <span className={result?.battery?.acConnected ? '' : ''}>{result?.battery?.percent}%</span>
           </div>
+
+          <div className='flex flex-col text-center'>
+            <span className='text-primary-200'>Uptime</span>
+            <span>{result?.client?.uptime}</span>
+          </div>
+
           <div className='flex flex-col text-center'>
             <span className='text-primary-200'>Free Disk Space</span>
-            <span title={`${Math.round((result?.disks?.main?.free / result?.disks?.main?.size) * 100)}%`}>
-              {humanFileSize(result?.disks?.main?.free)}
-            </span>
+            <span title={`${Math.round((result?.disk?.free / result?.disk?.size) * 100)}%`}>{humanFileSize(result?.disk?.free)}</span>
+          </div>
+
+          <div className='flex flex-col text-center'>
+            <span className='text-primary-200'>Total Disk Space</span>
+            <span>{humanFileSize(result?.disk?.size)}</span>
           </div>
         </div>
       </div>
