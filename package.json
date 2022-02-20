@@ -11,15 +11,18 @@
     "postinstall": "electron-builder install-app-deps"
   },
   "dependencies": {
-    "@m2vi/iva": "^1.0.8",
+    "@m2vi/iva": "^1.0.9",
     "check-disk-space": "^3.2.0",
     "electron-serve": "^1.1.0",
     "electron-store": "^8.0.1",
     "memory-cache": "^0.2.0",
+    "moment": "^2.29.1",
+    "moment-duration-format": "^2.3.2",
     "systeminformation": "^5.11.3"
   },
   "devDependencies": {
     "@types/memory-cache": "^0.2.2",
+    "@types/moment-duration-format": "^2.2.3",
     "@types/node": "^17.0.18",
     "@types/react": "^17.0.39",
     "autoprefixer": "^10.4.2",
