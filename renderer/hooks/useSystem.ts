@@ -1,30 +1,28 @@
-import { basicFetch } from '@m2vi/iva';
+import { ipcRenderer } from 'electron';
 import { useEffect, useState } from 'react';
-import { round } from '../utils/number';
 
-export const useSystem = (initalState: any, ms: number = 3000) => {
+export const useSystem = (initalState: any, ms: number = 3000): [any, number[]] => {
   const [result, setResult] = useState(initalState);
   const [history, setHistory] = useState([]);
 
-  const fetchResult = async () => {
-    try {
-      const start = performance.now();
-      const data = await basicFetch<any>('/api/system');
+  useEffect(() => {
+    ipcRenderer.on('system-api-res', (event, data) => {
+      if (data) {
+        setHistory([...history, data.time]);
+        setResult(data);
+      }
+    });
 
-      setHistory([...history, data?.time]);
-
-      return {
-        ...data,
-        fetchTime: round(performance.now() - start),
-      };
-    } catch (error) {
-      return null;
-    }
-  };
+    return () => {
+      ipcRenderer.removeAllListeners('system-api-res');
+    };
+  }, []);
 
   useEffect(() => {
+    ipcRenderer.send('system-api-req');
+
     const interval = setInterval(() => {
-      fetchResult().then((value) => value && setResult(value));
+      ipcRenderer.send('system-api-req');
     }, ms);
 
     return () => clearInterval(interval);

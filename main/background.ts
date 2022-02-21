@@ -1,5 +1,6 @@
-import { app } from 'electron';
+import { app, ipcMain } from 'electron';
 import serve from 'electron-serve';
+import system from '../renderer/utils/system';
 import { createWindow } from './helpers';
 
 const isProd: boolean = process.env.NODE_ENV === 'production';
@@ -18,6 +19,11 @@ if (isProd) {
     height: 600,
   });
 
+  mainWindow.webContents.on('new-window', function (e, url) {
+    e.preventDefault();
+    require('electron').shell.openExternal(url);
+  });
+
   if (isProd) {
     await mainWindow.loadURL('app://./home.html');
   } else {
@@ -29,4 +35,10 @@ if (isProd) {
 
 app.on('window-all-closed', () => {
   app.quit();
+});
+
+ipcMain.on('system-api-req', (event, arg) => {
+  system.get().then((data) => {
+    event.sender.send('system-api-res', data);
+  });
 });

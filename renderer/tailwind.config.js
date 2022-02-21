@@ -43,6 +43,7 @@ module.exports = {
         transparent: 'transparent',
         default: 'red',
         white: 'white',
+        spotify: '#1ED760',
         primary: {
           100: 'var(--color-primary-100)',
           200: 'var(--color-primary-200)',

@@ -2,25 +2,16 @@ import si from 'systeminformation';
 import os from 'os';
 import osu from 'node-os-utils';
 
-import psList from 'ps-list';
-
 import checkDiskSpace from 'check-disk-space';
 
-import moment from 'moment';
-import momentDurationFormatSetup from 'moment-duration-format';
 import { performance } from 'perf_hooks';
-import { round } from './number';
-import { readdirSync } from 'fs';
-import { basicFetch } from '@m2vi/iva';
-
-momentDurationFormatSetup(moment as any);
 
 class System {
   async get() {
     const start = performance.now();
 
     const data = {
-      client: { ...os.userInfo(), uptime: moment.duration(os.uptime(), 'seconds').format('m [minutes]') },
+      client: { ...os.userInfo(), uptime: os.uptime() },
       battery: await si.battery(),
       disk: await checkDiskSpace(`/`),
     };
@@ -29,7 +20,7 @@ class System {
 
     return {
       ...data,
-      time: round(end - start),
+      time: Math.round((end - start + Number.EPSILON) * 100) / 100,
     };
   }
 }
